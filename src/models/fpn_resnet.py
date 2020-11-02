@@ -45,7 +45,10 @@ class BasicBlock(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None):
         super(BasicBlock, self).__init__()
         self.conv1 = conv3x3(inplanes, planes, stride)
-        self.bn1 = nn.BatchNorm2d(planes, momentum=BN_MOMENTUM)
+        # nn.BatchNorm2d----input(N,C,H,W)四维,output(N,C,H,W),momentum为动量。一般默认为1，关系到running_mean and running_var
+        # 对4D输入应用批处理归一化(带有额外通道维度的小批2D输入)
+        self.bn1 = nn.BatchNorm2d(planes, momentum=BN_MOMENTUM) 
+            computation
         self.relu = nn.ReLU(inplace=True)
         self.conv2 = conv3x3(planes, planes)
         self.bn2 = nn.BatchNorm2d(planes, momentum=BN_MOMENTUM)
